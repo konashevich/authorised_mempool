@@ -1,0 +1,43 @@
+# User specified
+old/
+
+# TeX / LaTeX / Pandoc build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.dvi
+
+# Node / JS
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Solidity / Hardhat / Foundry
+artifacts/
+cache/
+coverage/
+typechain/
+typechain-types/
+out/
+broadcast/
+
+# Environment variables
+.env
+
+# System
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.swp
+
+# Agent
+.agent/

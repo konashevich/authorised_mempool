@@ -1,0 +1,8 @@
+---
+title: "Addressing Sanctioned and Unethical Validators in Public Blockchain Applications"
+author: "Oleksii Konashevych, PhD"
+institute: "oleksii@konashevych.com"
+keywords: "Public Blockchain, Sanctioned Validators, Smart Contracts, Government Applications, Design Science Research"
+abstract: |
+  Governments exploring public blockchain infrastructure face a critical challenge: ensuring that transaction processing does not inadvertently reward sanctioned or unethical validators. This paper proposes a dual-layer enforcement mechanism designed to reconcile the openness of permissionless networks with strict regulatory compliance. Employing Design Science Research (DSR) methodology, we introduce an "IT artifact" comprising (1) an infrastructure-level authorised transaction submission channel and (2) an application-level smart contract whitelist. This architecture ensures that sanctioned entities are technically and economically excluded from participating in government-regulated applications, demonstrating that control over applications does not require control over the underlying infrastructure.
+...
