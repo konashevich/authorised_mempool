@@ -3,7 +3,7 @@
 **Oleksii Konashevych, PhD**  
 oleksii@konashevych.com
 
-**Abstract.** Governments exploring public blockchain infrastructure face a critical challenge: ensuring that transaction processing does not inadvertently reward sanctioned or unethical validators. This paper proposes a dual-tier enforcement mechanism designed to reconcile the openness of permissionless networks with strict regulatory compliance. Employing Design Science Research (DSR) methodology, we introduce an "IT artifact" comprising (1) an infrastructure-level authorised transaction submission channel and (2) an application-level smart contract whitelist. This architecture ensures that sanctioned entities are technically and economically excluded from participating in government-regulated applications, demonstrating that control over applications does not require control over the underlying infrastructure.
+**Abstract.** Governments exploring public blockchain infrastructure face a critical challenge: ensuring that transaction processing does not inadvertently reward sanctioned or unethical validators. This paper proposes a dual-tier enforcement mechanism designed to reconcile the openness of permissionless networks with strict regulatory compliance. Employing Design Science Research (DSR) methodology, we introduce an "IT artifact" comprising (1) an infrastructure-level authorised transaction submission channel and (2) an application-level smart contract whitelist. This architecture ensures that sanctioned entities are technically and economically excluded from participating in government-regulated applications, demonstrating that control over applications does not require control over the underlying infrastructure. Crucially, the system imposes an immediate economic penalty on non-compliant usage: transactions routed through unauthorised validators are automatically reverted, causing the sender to forfeit gas fees without achieving the asset transfer.
 
 **Keywords:** Public Blockchain, Ethereum, Ethereum Virtual Machine, Sanctioned Validators, Smart Contracts, Government Applications.
 
@@ -64,7 +64,7 @@ The smart contract maintains an on-chain mapping of authorised validator address
 
 If an unauthorised (e.g., sanctioned or unknown) validator attempts to include a transaction from this application in their block, the smart contract detects that `block.coinbase` is not in the whitelist and immediately **reverts** the transaction.
 
- The consequences of this revert are critical. Firstly, the transaction fails immediately, ensuring no state change occurs. Secondly, the validator still expends computational resources to execute the logic up to the point of failure. Critically, while the base fee is burned (per EIP-1559), the priority fee (tip) intended for the validator technically still exists but is reduced to "economic dust"—negligible for the cost of inclusion. The transaction effectively yields zero meaningful value compared to a successful execution, and the user is penalised for attempting to bypass the authorised channel.
+The consequences of this revert are critical. Firstly, the transaction fails immediately, ensuring no state change occurs—**the token is not transferred**. Secondly, the user is still charged for the gas consumed by the execution up to the point of the revert. The non-compliant validator receives a small fee for this execution (the gas used), but the user is effectively penalised: they pay the fee but achieve nothing. This makes circumventing the authorised channel economically irrational for the user and serves as a deterrent for violating the ban to do business with sanctioned and nauthorised nodes. 
 
 ## 6 Evaluation
 
@@ -81,15 +81,24 @@ This confirms that the application-level enforcement mechanism functions as desi
 
 ### 7.1 Mechanism Analysis and Economic Rationality
 
-The combination of Tier 1 and Tier 2 creates a robust defense. Tier 1 is the primary operational mode, ensuring efficiency and privacy. Tier 2 acts as the "fail-safe" that makes circumvention economically irrational.
+To understand the robustness of this solution, consider a practical scenario. A regulatory body maintains a "Validator Registry" smart contract containing a list of authorised, compliant validators. When an issuer deploys a regulated security token, they include a specific logic check: "Is the validator proposing this block on the authorised list?"
 
-If a user were to bypass the private relayers and broadcast a transaction publicly, a sanctioned validator might pick it up. However, due to Tier 2, that transaction will fail. The user pays for gas but achieves nothing. This aligns incentives: users are forced to use the compliant Tier 1 channel to ensure their transactions succeed.
+The system is designed to punish circumvention. Suppose a user tries to bypass the authorised submission channel (Tier 1) and instead broadcasts their transaction to the public network mempool. A sanctioned or unauthorised validator might pick it up and attempt to process it.
+
+However, once the transaction is included in a block, the token's smart contract performs its check (Tier 2). It sees that the block producer is not on the regulator's whitelist. The contract immediately triggers a 'revert'.
+
+The result is a triple-penalty for the user's error:
+1.  **Transaction Published but Void:** The transaction is technically recorded on the blockchain, but the asset transfer is cancelled. The tokens never leave the user's wallet.
+2.  **Fee Forfeiture:** The user is still charged the "gas fee" for the computational work done up to the point of rejection. They pay for the transaction but receive nothing in return.
+3.  **Validator Disincentive:** The unauthorised validator receives only a trivial amount of gas fees for a failed transaction, rather than the full reward of a successful operation.
+
+This mechanism ensures that the only rational way to transact is through the compliant channel, as violating the rules results in guaranteed financial loss without successful execution.
 
 ### 7.2 The Regulated Perimeter
 
 This architecture enables what can be termed a "Regulated Perimeter" on public blockchains. The Regulated Perimeter signifies a system of whitelisted financial operators, their contracts, and customers. In other words, it establishes the due diligence and compliance framework through which both operators and customers are admitted "inside" the perimeter.
 
-Government bodies (e.g., regulators like ASIC or AUSTRAC) can maintain the on-chain whitelist, effectively locking out any address suspected of violating regulations. This allows the regulator to retain absolute control over *who* processes the data, without needing to control the entire network.
+Government bodies can maintain the on-chain whitelist, effectively locking out any address suspected of violating regulations. This allows the regulator to retain absolute control over *who* processes the data, without needing to control the entire network.
 
 ### 7.3 Limitations
 
