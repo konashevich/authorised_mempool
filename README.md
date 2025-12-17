@@ -31,4 +31,9 @@ To generate the LNCS-style PDF from the markdown source:
 This will produce `sanctioned_validators_paper.pdf`.
 
 ## License
-MIT
+
+This repository is dual-licensed:
+
+*   **Code and Software** (including Smart Contracts and Scripts): Released under the **MIT License**. You are free to use, modify, and distribute the code for any purpose, including commercial applications.
+*   **Paper and Documentation** (`.md` files, PDFs): Released under the **Creative Commons Attribution 4.0 International (CC BY 4.0)** license. You are free to share and adapt the content, provided you give appropriate credit to the author.
+
