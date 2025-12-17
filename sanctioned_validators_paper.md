@@ -3,9 +3,9 @@
 **Oleksii Konashevych, PhD**  
 oleksii@konashevych.com
 
-**Abstract.** Governments exploring public blockchain infrastructure face a critical challenge: ensuring that transaction processing does not inadvertently reward sanctioned or unethical validators. This paper proposes a dual-layer enforcement mechanism designed to reconcile the openness of permissionless networks with strict regulatory compliance. Employing Design Science Research (DSR) methodology, we introduce an "IT artifact" comprising (1) an infrastructure-level authorised transaction submission channel and (2) an application-level smart contract whitelist. This architecture ensures that sanctioned entities are technically and economically excluded from participating in government-regulated applications, demonstrating that control over applications does not require control over the underlying infrastructure.
+**Abstract.** Governments exploring public blockchain infrastructure face a critical challenge: ensuring that transaction processing does not inadvertently reward sanctioned or unethical validators. This paper proposes a dual-tier enforcement mechanism designed to reconcile the openness of permissionless networks with strict regulatory compliance. Employing Design Science Research (DSR) methodology, we introduce an "IT artifact" comprising (1) an infrastructure-level authorised transaction submission channel and (2) an application-level smart contract whitelist. This architecture ensures that sanctioned entities are technically and economically excluded from participating in government-regulated applications, demonstrating that control over applications does not require control over the underlying infrastructure.
 
-**Keywords:** Public Blockchain, Sanctioned Validators, Smart Contracts, Government Applications, Design Science Research.
+**Keywords:** Public Blockchain, Ethereum, Ethereum Virtual Machine, Sanctioned Validators, Smart Contracts, Government Applications.
 
 ---
 
@@ -42,23 +42,23 @@ A critical gap remains in addressing *application-specific* compliance. Existing
 
 ## 4 Methodology
 
-This research adopts the **Design Science Research (DSR)** methodology. DSR is a problem-solving paradigm that seeks to enhance human knowledge via the creation of innovative artifacts. In this context, the problem is the compliance gap in public blockchains, and the "artifact" is the proposed Dual-Layer Enforcement Mechanism.
+This research adopts the **Design Science Research (DSR)** methodology. DSR is a problem-solving paradigm that seeks to enhance human knowledge via the creation of innovative artifacts. In this context, the problem is the compliance gap in public blockchains, and the "artifact" is the proposed Dual-Tier Enforcement Mechanism.
 
 The artifact is designed to satisfy two primary requirements: strict compliance and open infrastructure. First, the mechanism must ensure that zero fees flow to sanctioned validators, effectively cutting them off from the economic activity of the application. Second, the solution must operate on standard public blockchains without requiring protocol forks, thereby preserving the benefits of permissionless infrastructure while enforcing selective compliance.
 
-## 5 The Artifact: Dual-Layer Enforcement Mechanism
+## 5 The Artifact: Dual-Tier Enforcement Mechanism
 
-The proposed solution relies on two mutually reinforcing mechanisms: strictly controlled transaction routing (Layer 1) and on-chain validity enforcement (Layer 2).
+The proposed solution relies on two mutually reinforcing mechanisms: strictly controlled transaction routing (Tier 1) and on-chain validity enforcement (Tier 2).
 
-### 5.1 Layer 1: Authorised Transaction Submission Channel
+### 5.1 Tier 1: Authorised Transaction Submission Channel
 
-The first layer operates off-chain at the infrastructure level. Government applications are designed to bypass the public "mempool"—the waiting area for transactions where any validator can pick them up. Instead, transactions are routed exclusively through a private submission protocol.
+The first tier operates off-chain at the infrastructure level. Government applications are designed to bypass the public "mempool"—the waiting area for transactions where any validator can pick them up. Instead, transactions are routed exclusively through a private submission protocol.
 
 In this model, the government or its designates operate authenticated relayers. These relayers maintain direct peering connections only with a specific set of whitelisted validators who have proven their jurisdiction and compliance identity. When a user interacts with the government application, their transaction is sent directly to these compliant nodes. Consequently, sanctioned validators never observe these transactions and thus cannot include them in a block.
 
-### 5.2 Layer 2: On-Chain Validator Whitelist Enforcement
+### 5.2 Tier 2: On-Chain Validator Whitelist Enforcement
 
-While Layer 1 prevents sanctioned validators from seeing transactions under normal conditions, it is not cryptographically enforceable on its own (a transaction could accidentally leak to the public mempool). Layer 2 provides the "enforcement" via the smart contract itself.
+While Tier 1 prevents sanctioned validators from seeing transactions under normal conditions, it is not cryptographically enforceable on its own (a transaction could accidentally leak to the public mempool). Tier 2 provides the "enforcement" via the smart contract itself.
 
 The smart contract maintains an on-chain mapping of authorised validator addresses (specifically, the `fee recipient` or `coinbase` address). Every state-changing function in the contract includes a modifier that checks the identity of the current block producer (`block.coinbase`).
 
@@ -75,15 +75,15 @@ The smart contract successfully identified the `block.coinbase` (the fee recipie
 *   **Case A: Compliant Validator.** When a transaction was simulated in a block built by a whitelisted address, the transaction executed successfully, and state changes (token transfers) were committed.
 *   **Case B: Non-Compliant Validator.** When the same transaction was simulated in a block built by a non-whitelisted address, the `SanctionGuard` modifier triggered a `revert`. The transaction failed, and no state changes occurred.
 
-This confirms that the application-layer enforcement mechanism functions as designed, providing a deterministic barrier against unauthorised validators.
+This confirms that the application-level enforcement mechanism functions as designed, providing a deterministic barrier against unauthorised validators.
 
 ## 7 Discussion
 
 ### 7.1 Mechanism Analysis and Economic Rationality
 
-The combination of Layer 1 and Layer 2 creates a robust defense. Layer 1 is the primary operational mode, ensuring efficiency and privacy. Layer 2 acts as the "fail-safe" that makes circumvention economically irrational.
+The combination of Tier 1 and Tier 2 creates a robust defense. Tier 1 is the primary operational mode, ensuring efficiency and privacy. Tier 2 acts as the "fail-safe" that makes circumvention economically irrational.
 
-If a user were to bypass the private relayers and broadcast a transaction publicly, a sanctioned validator might pick it up. However, due to Layer 2, that transaction will fail. The user pays for gas but achieves nothing. This aligns incentives: users are forced to use the compliant Layer 1 channel to ensure their transactions succeed.
+If a user were to bypass the private relayers and broadcast a transaction publicly, a sanctioned validator might pick it up. However, due to Tier 2, that transaction will fail. The user pays for gas but achieves nothing. This aligns incentives: users are forced to use the compliant Tier 1 channel to ensure their transactions succeed.
 
 ### 7.2 The Regulated Perimeter
 
@@ -97,7 +97,7 @@ This approach relies on `block.coinbase` identification. In modern Ethereum arch
 
 ## 8 Conclusion
 
-We have presented a dual-layer mechanism that solves the seemingly intractable problem of using open, permissionless validators for regulated government applications. By combining private transaction routing with on-chain execution gating, governments can ensure their applications are processed exclusively by compliant entities. This approach demonstrates that public blockchains can support stringent regulatory requirements, provided that enforcement is built into the application design itself. Future work will focus on a live pilot deployment on the Sepolia testnet to measure latency impacts and formal verification of the `SanctionGuard` logic.
+We have presented a dual-tier mechanism that solves the seemingly intractable problem of using open, permissionless validators for regulated government applications. By combining private transaction routing with on-chain execution gating, governments can ensure their applications are processed exclusively by compliant entities. This approach demonstrates that public blockchains can support stringent regulatory requirements, provided that enforcement is built into the application design itself. Future work will focus on a live pilot deployment on the Sepolia testnet to measure latency impacts and formal verification of the `SanctionGuard` logic.
 
 ---
 
@@ -112,7 +112,7 @@ We have presented a dual-layer mechanism that solves the seemingly intractable p
 
 ## Annex: Smart Contract Implementation
 
-The following Solidity code demonstrates the implementation of the Dual-Layer Enforcement Mechanism. The full project source code and maintenance updates are available at [5]. The implementation consists of three components:
+The following Solidity code demonstrates the implementation of the Dual-Tier Enforcement Mechanism. The full project source code and maintenance updates are available at [5]. The implementation consists of three components:
 1.  **ValidatorRegistry**: Management of the "Regulated Perimeter".
 2.  **SanctionGuard**: The abstract enforcement module.
 3.  **RegulatedToken**: An example ERC-20 token that integrates the guard to enforce compliance on every transfer.

@@ -61,20 +61,23 @@ echo "Creating LNCS template..."
 cat > "$TEMPLATE_FILE" << 'EOF'
 \documentclass{llncs}
 \usepackage[utf8]{inputenc}
-\usepackage{url}
+\usepackage{xurl}
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{xcolor}
-\usepackage{hyperref}
+\usepackage[hidelinks,breaklinks]{hyperref}
 
 % Code block styling
 \lstset{
-  basicstyle=\ttfamily\small,
+  basicstyle=\ttfamily\scriptsize,
   breaklines=true,
   frame=single,
   backgroundcolor=\color{gray!10},
   columns=flexible
 }
+
+% Define passthrough for pandoc listings
+\newcommand{\passthrough}[1]{#1}
 
 % Fix for pandoc tightlist
 \providecommand{\tightlist}{%
@@ -118,6 +121,13 @@ EOF
 echo "Preparing document body..."
 tail -n +12 "$INPUT_FILE" > "$TEMP_BODY"
 
+# Clean up headers to avoid double numbering and 0.x sectioning
+# 1. Remove hardcoded numbers (e.g., "1 Introduction" -> "Introduction")
+sed -i -E 's/^(#+) [0-9.]+[[:space:]]+/\1 /' "$TEMP_BODY"
+# 2. Make subsections "References" and "Annex" unnumbered
+sed -i 's/^## References/## References {-}/' "$TEMP_BODY"
+sed -i 's/^## Annex/## Annex {-}/' "$TEMP_BODY"
+
 # 5. Run Pandoc
 echo "Generating PDF..."
 pandoc "$TEMP_BODY" \
@@ -125,6 +135,8 @@ pandoc "$TEMP_BODY" \
     --template="$TEMPLATE_FILE" \
     --metadata-file="$METADATA_FILE" \
     --pdf-engine=pdflatex \
+    --listings \
+    --shift-heading-level-by=-1 \
     -o "$OUTPUT_FILE"
 
 EXIT_CODE=$?
