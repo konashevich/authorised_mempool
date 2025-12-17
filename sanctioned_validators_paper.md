@@ -107,10 +107,12 @@ We have presented a dual-layer mechanism that solves the seemingly intractable p
 2.  Wahrstätter, A. et al.: Blockchain Censorship. arXiv preprint arXiv:2301.00000 (2023)
 3.  Flashbots: The operational decentralisation of the Flashbots relay (2022). https://writings.flashbots.net/
 4.  Buterin, V.: State of research: increasing censorship resistance of transactions under proposer/builder separation (PBS) (2022). https://notes.ethereum.org/
+5.  Konashevych, O.: Authorised Mempool Project Repository. https://github.com/konashevich/authorised_mempool
+
 
 ## Annex: Smart Contract Implementation
 
-The following Solidity code demonstrates the implementation of the Dual-Layer Enforcement Mechanism. It consists of three components:
+The following Solidity code demonstrates the implementation of the Dual-Layer Enforcement Mechanism. The full project source code and maintenance updates are available at [5]. The implementation consists of three components:
 1.  **ValidatorRegistry**: Management of the "Regulated Perimeter".
 2.  **SanctionGuard**: The abstract enforcement module.
 3.  **RegulatedToken**: An example ERC-20 token that integrates the guard to enforce compliance on every transfer.
