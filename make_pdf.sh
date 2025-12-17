@@ -24,19 +24,24 @@ if ! command -v pdflatex &> /dev/null; then
 fi
 
 # 1b. Generate Metadata if missing
-if [ ! -f "$METADATA_FILE" ]; then
-    echo "Generating metadata file..."
-    cat > "$METADATA_FILE" << 'EOF'
+# 1b. Generate Metadata dynamically from source
+echo "Extracting metadata from $INPUT_FILE..."
+# Extract Abstract (Line 6)
+ABSTRACT=$(sed -n '6s/^\*\*Abstract.\*\* //p' "$INPUT_FILE")
+# Extract Keywords (Line 8)
+KEYWORDS=$(sed -n '8s/^\*\*Keywords:\*\* //p' "$INPUT_FILE")
+
+echo "Generating metadata file..."
+cat > "$METADATA_FILE" << EOF
 ---
 title: "Addressing Sanctioned and Unethical Validators in Public Blockchain Applications"
 author: "Oleksii Konashevych, PhD"
 institute: "oleksii@konashevych.com"
-keywords: "Public Blockchain, Sanctioned Validators, Smart Contracts, Government Applications, Design Science Research"
+keywords: "$KEYWORDS"
 abstract: |
-  Governments exploring public blockchain infrastructure face a critical challenge: ensuring that transaction processing does not inadvertently reward sanctioned or unethical validators. This paper proposes a dual-layer enforcement mechanism designed to reconcile the openness of permissionless networks with strict regulatory compliance. Employing Design Science Research (DSR) methodology, we introduce an "IT artifact" comprising (1) an infrastructure-level authorised transaction submission channel and (2) an application-level smart contract whitelist. This architecture ensures that sanctioned entities are technically and economically excluded from participating in government-regulated applications, demonstrating that control over applications does not require control over the underlying infrastructure.
+  $ABSTRACT
 ...
 EOF
-fi
 
 # 2. Download LNCS Class and Bib Style if missing
 if [ ! -f "llncs.cls" ]; then

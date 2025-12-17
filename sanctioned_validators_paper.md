@@ -114,11 +114,11 @@ We have presented a dual-tier mechanism that solves the seemingly intractable pr
 
 ## References
 
-1.  U.S. Department of the Treasury: U.S. Treasury Sanctions Notorious Virtual Currency Mixer Tornado Cash (2022). https://home.treasury.gov/news/press-releases/jy0916
+1.  U.S. Department of the Treasury: U.S. Treasury Sanctions Notorious Virtual Currency Mixer Tornado Cash (2022). <https://home.treasury.gov/news/press-releases/jy0916>
 2.  Wahrstätter, A. et al.: Blockchain Censorship. arXiv preprint arXiv:2301.00000 (2023)
-3.  Flashbots: The operational decentralisation of the Flashbots relay (2022). https://writings.flashbots.net/
-4.  Buterin, V.: State of research: increasing censorship resistance of transactions under proposer/builder separation (PBS) (2022). https://notes.ethereum.org/
-5.  Konashevych, O.: Authorised Mempool Project Repository. https://github.com/konashevich/authorised_mempool
+3.  Flashbots: The operational decentralisation of the Flashbots relay (2022). <https://writings.flashbots.net/>
+4.  Buterin, V.: State of research: increasing censorship resistance of transactions under proposer/builder separation (PBS) (2022). <https://notes.ethereum.org/>
+5.  Konashevych, O.: Authorised Mempool Project Repository. <https://github.com/konashevich/authorised_mempool>
 
 
 ## Annex: Smart Contract Implementation
