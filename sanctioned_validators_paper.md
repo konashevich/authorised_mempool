@@ -54,7 +54,9 @@ The proposed solution relies on two mutually reinforcing mechanisms: strictly co
 
 The first tier operates off-chain at the infrastructure level. Government applications are designed to bypass the public "mempool"—the waiting area for transactions where any validator can pick them up. Instead, transactions are routed exclusively through a private submission protocol.
 
-In this model, the government or its designates operate authenticated relayers. These relayers maintain direct peering connections only with a specific set of whitelisted validators who have proven their jurisdiction and compliance identity. When a user interacts with the government application, their transaction is sent directly to these compliant nodes. Consequently, sanctioned validators never observe these transactions and thus cannot include them in a block.
+In this model, the government or its designates operate authenticated relayers. These relayers differ from standard nodes in that they do not "gossip" (broadcast) transactions to the public peer-to-peer network. Instead, they maintain persistent, direct Peering (TCP/IP) connections exclusively with a specific set of whitelisted validators who have proven their jurisdiction and compliance identity.
+
+For the end-user, this requires a specific wallet configuration or DApp integration. The user's wallet (e.g., via a custom RPC endpoint) or the application interface sends the signed transaction directly to the secure relayer via an API (e.g., standard HTTP POST), bypassing the public network entirely. Consequently, sanctioned validators never observe these transactions in their local mempools and thus cannot attempt to include them in a block.
 
 ### 5.2 Tier 2: On-Chain Validator Whitelist Enforcement
 
@@ -106,7 +108,7 @@ This approach relies on `block.coinbase` identification. In modern Ethereum arch
 
 ## 8 Conclusion
 
-We have presented a dual-tier mechanism that solves the seemingly intractable problem of using open, permissionless validators for regulated government applications. By combining private transaction routing with on-chain execution gating, governments can ensure their applications are processed exclusively by compliant entities. This approach demonstrates that public blockchains can support stringent regulatory requirements, provided that enforcement is built into the application design itself. Future work will focus on a live pilot deployment on the Sepolia testnet to measure latency impacts and formal verification of the `SanctionGuard` logic.
+We have presented a dual-tier mechanism that solves the seemingly intractable problem of using open, permissionless validators for regulated government applications. By combining private transaction routing with on-chain execution gating, governments can ensure their applications are processed exclusively by compliant entities. This approach demonstrates that public blockchains can support stringent regulatory requirements, provided that enforcement is built into the application design itself. Future work will focus on the development of open protocols for maintaining these authorised mempool channels, the creation of custom wallet specifications to support seamless private routing, and a comprehensive pilot deployment on the Sepolia testnet to validate the full system end-to-end.
 
 ---
 
